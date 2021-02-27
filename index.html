@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+  <style>
+    body {
+      background: black;
+      height: 100vh;
+      margin: 0;
+    }
+	
+	#videoContainer{
+		position:relative;
+		width:100%;
+		height:100%;
+	}
+
+	#partnerVideoContainer{
+		position:absolute;
+		background-color:grey;
+		width:100%;
+		height:100%;
+		z-index:1;
+	}
+	
+    #localVideo {
+      background-image: url(videoBackground.png); 
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      box-sizing: border-box;
+      border-radius: 2px;
+      padding: 0;
+	  position:absolute;
+		background-color:#1e1e20;
+		max-width:25%;
+		max-height:25%;
+		z-index:2;
+		bottom:0;
+		right:0;
+		border: 2px solid black;
+    }
+	
+	#remoteVideo{
+      background-image: url(videoBackground.png); 
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      box-sizing: border-box;
+      border-radius: 2px;
+      padding: 0;
+	  position:absolute;
+		background-color:#1e1e20;
+		width:100%;
+		height:100%;
+		z-index:1;
+		border: 2px solid black;
+    }
+	
+	#chatContainer{
+		height:100%;
+		width:100%;
+		background-color:#1e1e20;
+	}
+	
+	.recievedMessageContainer{
+		position:relative;
+		text-align:left;
+		width:100%;
+		padding-top: 10px;
+		clear:both;
+	}
+	
+	.recievedMessage{
+		text-align:left;
+		width:80%;
+		padding:10px;
+		background-color:black;
+		color: white;
+		
+	}
+	
+	.sentMessageContainer{
+		position:relative;
+		text-align:right;
+		width:100%;
+		padding-top: 10px;
+		clear:both;
+	}
+	
+	.sentMessage{
+		text-align:left;
+		width:80%;
+		padding:10px;
+		background-color:#0d0736;
+		color: white;
+		float:right;
+		
+	}
+	
+	#messageScroll{
+		width:100%;
+		height:90%;
+		overflow-y:scroll;
+		overflow-x: hidden;
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+	
+	#messageScroll::-webkit-scrollbar {
+	  display: none;
+	}
+	#textMessageContainer{
+		height:10%;
+		padding:5px;
+	}
+	
+	button{
+		border: 0;
+		 background: none;
+		 box-shadow: none;
+		 border-radius: 0px;
+	}
+	
+  </style>
+</head>
+<body>
+	<div class="container-fluid" style="height:100%;">
+
+		<div class="row" style="height:90%;">
+			<div class="col-md-9">
+				<div id="videoContainer">
+		 
+					<video id="localVideo" autoplay muted></video>
+
+
+					<video id="remoteVideo" autoplay></video>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div id="chatContainer">
+					<div id="messageScroll">
+						<div class="recievedMessageContainer">
+							<div class="recievedMessage">
+								<span>Hello World</span>
+							</div>
+						</div>
+						
+						<div class="sentMessageContainer">
+							<div class="sentMessage">
+								<span>Hello World</span>
+							</div>
+						</div>
+						
+						<div class="recievedMessageContainer">
+							<div class="recievedMessage">
+								<span>Hello World</span>
+							</div>
+						</div>
+						
+						<div class="sentMessageContainer">
+							<div class="sentMessage">
+								<span>Hello World</span>
+							</div>
+						</div>
+						
+					</div>
+					<div id="textMessageContainer">
+					<div class="row">
+						<div class="col-md-10">
+							<textarea style="width:100%; height:100%; background-color:black;resize: none; color:white;" placeholder="type your message here..."></textarea>
+						</div>
+						<div class="col-md-2">
+							<div style="margin: auto;width: 100%;padding: 10px;">
+								<a href="javascript:void(0);" style="font-size:24px; color:white;"> &#10148;</a>
+								
+							</div>
+							
+						</div>
+					</div>
+						</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" style="height:10%;">
+			<div class="col-md-2" style=" height:100%;">
+				<button style="width:100%; height:100%; background-color:#0d0736; color:white; font-size:48px;">
+					▲
+				</button>
+			</div>
+			<div class="col-md-2" style=" height:100%;">
+				<button style="width:100%; height:100%; background-color:#0d0736; color:white; font-size:48px;">
+					▼
+				</button>
+			</div>
+			<div class="col-md-2" style=" height:100%;">
+				<button style="width:100%; height:100%; background-color:#0d0736; color:white; font-size:48px;">
+					←
+				</button>
+			</div>
+			<div class="col-md-2" style=" height:100%;">
+				<button style="width:100%; height:100%; background-color:#0d0736; color:white; font-size:48px;">
+					→
+				</button>
+			</div>
+			<div class="col-md-1" style=" height:100%;">
+				<button style="width:100%; height:100%; background-color:#0d0736; color:white; font-size:48px;">
+					+
+				</button>
+			</div>
+			<div class="col-md-1" style=" height:100%;">
+				<button style="width:100%; height:100%; background-color:#0d0736; color:white; font-size:48px;">
+					-
+				</button>
+			</div>
+			<div class="col-md-2" style="  height:100%;">
+				<button style="width:100%; height:100%; background-color:red; color:white; ">
+					Leave Meeting
+				</button>
+			</div>
+		</div>
+		
+	</div>
+  
+  
+  
+  <script src="script.js"></script>
+</body>
+</html>
