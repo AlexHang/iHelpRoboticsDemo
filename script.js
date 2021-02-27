@@ -8,6 +8,13 @@ const roomHash = location.hash.substring(1);
 const drone = new ScaleDrone('rNJKWINZW3VIAWU2');
 // Room name needs to be prefixed with 'observable-'
 const roomName = 'observable-' + roomHash;
+
+
+var servers = { 'iceServers': [{ 'urls': 'stun:74.125.142.127:19302' }] };
+//var  _iceServers = [{ url: 'stun:74.125.142.127:19302' }], // stun.l.google.com - Firefox does not support DNS names.
+
+connection = new RTCPeerConnection(servers); 
+
 const configuration = {
   iceServers: [{
     urls: 'stun:stun.l.google.com:19302'
@@ -51,7 +58,7 @@ function sendMessage(message) {
 }
 
 function startWebRTC(isOfferer) {
-  pc = new RTCPeerConnection(configuration);
+  pc = new RTCPeerConnection(servers); //new RTCPeerConnection(configuration);
 
   // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
   // message to the other peer through the signaling server
@@ -69,11 +76,8 @@ function startWebRTC(isOfferer) {
   }
 
   // When a remote stream arrives display it in the #remoteVideo element
-  pc.ontrack = event => {
-    const stream = event.streams[0];
-    if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
-      remoteVideo.srcObject = stream;
-    }
+  pc.onaddstream = event => {
+    remoteVideo.srcObject = event.stream;
   };
 
   navigator.mediaDevices.getUserMedia({
@@ -83,7 +87,7 @@ function startWebRTC(isOfferer) {
     // Display your local video in #localVideo element
     localVideo.srcObject = stream;
     // Add your stream to be sent to the conneting peer
-    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+    pc.addStream(stream);
   }, onError);
 
   // Listen to signaling data from Scaledrone
