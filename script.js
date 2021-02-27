@@ -69,8 +69,11 @@ function startWebRTC(isOfferer) {
   }
 
   // When a remote stream arrives display it in the #remoteVideo element
-  pc.onaddstream = event => {
-    remoteVideo.srcObject = event.stream;
+  pc.ontrack = event => {
+    const stream = event.streams[0];
+    if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
+      remoteVideo.srcObject = stream;
+    }
   };
 
   navigator.mediaDevices.getUserMedia({
@@ -80,7 +83,7 @@ function startWebRTC(isOfferer) {
     // Display your local video in #localVideo element
     localVideo.srcObject = stream;
     // Add your stream to be sent to the conneting peer
-    pc.addStream(stream);
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
   }, onError);
 
   // Listen to signaling data from Scaledrone
