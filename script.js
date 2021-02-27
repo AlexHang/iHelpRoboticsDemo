@@ -10,14 +10,15 @@ const drone = new ScaleDrone('rNJKWINZW3VIAWU2');
 const roomName = 'observable-' + roomHash;
 
 
-var servers = { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] };
-//var  _iceServers = [{ url: 'stun:74.125.142.127:19302' }], // stun.l.google.com - Firefox does not support DNS names.
+
 
 //connection = new RTCPeerConnection(servers); 
 
 const configuration = {
   iceServers: [{
-    urls: 'stun:stun.l.google.com:19302'
+    url: 'turn:192.158.29.39:3478?transport=udp',
+    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+    username: '28224511:1379330808'
   }]
 };
 let room;
@@ -58,7 +59,7 @@ function sendMessage(message) {
 }
 
 function startWebRTC(isOfferer) {
-  pc = new RTCPeerConnection(servers); //new RTCPeerConnection(configuration);
+  pc = new RTCPeerConnection(configuration); //new RTCPeerConnection(configuration);
 
   // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
   // message to the other peer through the signaling server
