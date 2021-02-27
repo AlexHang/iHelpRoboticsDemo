@@ -1,45 +1,46 @@
-// Generate random room name if needed
 if (!location.hash) {
   location.hash = Math.floor(Math.random() * 0xFFFFFF).toString(16);
 }
 const roomHash = location.hash.substring(1);
+//const roomHash = '5dfd9b';
+console.log("ROOM ID: >> " +roomHash);
 
 // TODO: Replace with your own channel ID
 const drone = new ScaleDrone('rNJKWINZW3VIAWU2');
 // Room name needs to be prefixed with 'observable-'
-const roomName = 'observable-' + roomHash;
-
-
-
-
-//connection = new RTCPeerConnection(servers); 
-
+//const roomName = 'observable-' + roomHash;
+const roomName = 'observable-testPHR';
 const configuration = {
   iceServers: [{
-    url: 'turn:192.158.29.39:3478?transport=udp',
-    credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-    username: '28224511:1379330808'
+    urls: 'stun:stun.l.google.com:19302'
   }]
 };
 let room;
 let pc;
 
 
-function onSuccess() {};
+function onSuccess() {
+    console.log("Connection sucess");
+};
 function onError(error) {
-  console.error(error);
+  console.log("Connection failed!");
+  //console.error(error);
 };
 
 drone.on('open', error => {
+
   if (error) {
+     console.log( " Error open drone >>");
     return console.error(error);
   }
+  console.log(" Drone open >>")
   room = drone.subscribe(roomName);
   room.on('open', error => {
     if (error) {
       onError(error);
     }
   });
+
   // We're connected to the room and received an array of 'members'
   // connected to the room (including us). Signaling server is ready.
   room.on('members', members => {
@@ -52,6 +53,7 @@ drone.on('open', error => {
 
 // Send signaling data via Scaledrone
 function sendMessage(message) {
+    console.log("Sending signal via scaledrone >>");
   drone.publish({
     room: roomName,
     message
@@ -59,38 +61,53 @@ function sendMessage(message) {
 }
 
 function startWebRTC(isOfferer) {
-  pc = new RTCPeerConnection(configuration); //new RTCPeerConnection(configuration);
+  console.log('Starting WebRTC in as', isOfferer ? 'offerer' : 'waiter');
+  pc = new RTCPeerConnection(configuration);
 
+  console.log(" Test A ");
   // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
   // message to the other peer through the signaling server
   pc.onicecandidate = event => {
+    console.log("Send Message to Candidate");
     if (event.candidate) {
       sendMessage({'candidate': event.candidate});
     }
   };
 
+  console.log(" Test B ");
   // If user is offerer let the 'negotiationneeded' event create the offer
   if (isOfferer) {
+      console.log(" Create Offer ");
     pc.onnegotiationneeded = () => {
       pc.createOffer().then(localDescCreated).catch(onError);
     }
   }
 
+  console.log(" Test C ");
   // When a remote stream arrives display it in the #remoteVideo element
   pc.onaddstream = event => {
-    remoteVideo.srcObject = event.stream;
+    console.log("Display remote video >>>")
+    const stream = event.streams[0];
+    console.log(" Stream : >>" +stream);
+    if (!remoteVideo.srcObject || remoteVideo.srcObject.id !== stream.id) {
+      remoteVideo.srcObject = stream;
+    }
   };
+
+  console.log(" Test D ");
 
   navigator.mediaDevices.getUserMedia({
     audio: true,
     video: true,
   }).then(stream => {
+    console.log(" Display Local Video >> ");
     // Display your local video in #localVideo element
     localVideo.srcObject = stream;
     // Add your stream to be sent to the conneting peer
-    pc.addStream(stream);
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
   }, onError);
 
+ console.log(" Test E ");
   // Listen to signaling data from Scaledrone
   room.on('data', (message, client) => {
     // Message was sent by us
@@ -98,11 +115,14 @@ function startWebRTC(isOfferer) {
       return;
     }
 
+console.log(" Test F ");
+
     if (message.sdp) {
       // This is called after receiving an offer or answer from another peer
       pc.setRemoteDescription(new RTCSessionDescription(message.sdp), () => {
         // When receiving an offer lets answer it
         if (pc.remoteDescription.type === 'offer') {
+          console.log(" Answer call ");
           pc.createAnswer().then(localDescCreated).catch(onError);
         }
       }, onError);
@@ -112,13 +132,3 @@ function startWebRTC(isOfferer) {
         new RTCIceCandidate(message.candidate), onSuccess, onError
       );
     }
-  });
-}
-
-function localDescCreated(desc) {
-  pc.setLocalDescription(
-    desc,
-    () => sendMessage({'sdp': pc.localDescription}),
-    onError
-  );
-}
