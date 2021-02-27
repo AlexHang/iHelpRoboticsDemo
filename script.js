@@ -1,4 +1,5 @@
-if (!location.hash) {
+
+ if (!location.hash) {
   location.hash = Math.floor(Math.random() * 0xFFFFFF).toString(16);
 }
 const roomHash = location.hash.substring(1);
@@ -6,7 +7,7 @@ const roomHash = location.hash.substring(1);
 console.log("ROOM ID: >> " +roomHash);
 
 // TODO: Replace with your own channel ID
-const drone = new ScaleDrone('rNJKWINZW3VIAWU2');
+const drone = new ScaleDrone('AUpfMxm16E9bfdgA');
 // Room name needs to be prefixed with 'observable-'
 //const roomName = 'observable-' + roomHash;
 const roomName = 'observable-testPHR';
@@ -85,7 +86,7 @@ function startWebRTC(isOfferer) {
 
   console.log(" Test C ");
   // When a remote stream arrives display it in the #remoteVideo element
-  pc.onaddstream = event => {
+  pc.ontrack = event => {
     console.log("Display remote video >>>")
     const stream = event.streams[0];
     console.log(" Stream : >>" +stream);
@@ -132,4 +133,14 @@ console.log(" Test F ");
         new RTCIceCandidate(message.candidate), onSuccess, onError
       );
     }
-  }
+
+  });
+}
+
+function localDescCreated(desc) {
+  pc.setLocalDescription(
+    desc,
+    () => sendMessage({'sdp': pc.localDescription}),
+    onError
+  );
+}
