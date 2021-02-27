@@ -13,7 +13,7 @@ const roomName = 'observable-' + roomHash;
 var servers = { 'iceServers': [{ 'urls': 'turn:turn01.hubl.in?transport=udp' }] };
 //var  _iceServers = [{ url: 'stun:74.125.142.127:19302' }], // stun.l.google.com - Firefox does not support DNS names.
 
-connection = new RTCPeerConnection(servers); 
+//connection = new RTCPeerConnection(servers); 
 
 const configuration = {
   iceServers: [{
