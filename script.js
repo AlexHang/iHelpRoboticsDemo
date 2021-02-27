@@ -86,7 +86,7 @@ function startWebRTC(isOfferer) {
 
   console.log(" Test C ");
   // When a remote stream arrives display it in the #remoteVideo element
-  pc.onaddstream = event => {
+  pc.ontrack = event => {
     console.log("Display remote video >>>")
     const stream = event.streams[0];
     console.log(" Stream : >>" +stream);
