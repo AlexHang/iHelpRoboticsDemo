@@ -106,7 +106,15 @@ function startWebRTC(isOfferer) {
     remoteVideo.srcObject = event.stream;
   };
 
- 
+  navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: true,
+  }).then(stream => {
+    // Display your local video in #localVideo element
+    localVideo.srcObject = stream;
+    // Add your stream to be sent to the conneting peer
+    pc.addStream(stream);
+  }, onError);
 
   // Listen to signaling data from Scaledrone
   room.on('data', (message, client) => {
@@ -118,17 +126,6 @@ function startWebRTC(isOfferer) {
     if (message.sdp) {
       // This is called after receiving an offer or answer from another peer
       pc.setRemoteDescription(new RTCSessionDescription(message.sdp), () => {
-		 
-		navigator.mediaDevices.getUserMedia({
-			audio: true,
-			video: true,
-		  }).then(stream => {
-			// Display your local video in #localVideo element
-			localVideo.srcObject = stream;
-			// Add your stream to be sent to the conneting peer
-			pc.addStream(stream);
-		  }, onError);
-		  
         // When receiving an offer lets answer it
         if (pc.remoteDescription.type === 'offer') {
           pc.createAnswer().then(localDescCreated).catch(onError);
@@ -150,4 +147,3 @@ function localDescCreated(desc) {
     onError
   );
 }
-© 2021 GitHub, Inc.
