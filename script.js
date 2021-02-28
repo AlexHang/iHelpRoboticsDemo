@@ -19,9 +19,6 @@ const configuration = {
    {
      urls: 'stun:iphone-stun.strato-iphone.de:3478'
    },   
-    {
-     urls: 'turn:turn01.hubl.in?transport=udp'
-   },
    {
     url: 'turn:numb.viagenie.ca',
     credential: 'muazkh',
