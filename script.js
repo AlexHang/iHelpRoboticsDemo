@@ -9,42 +9,20 @@ const drone = new ScaleDrone('rNJKWINZW3VIAWU2');
 // Room name needs to be prefixed with 'observable-'
 const roomName = 'observable-' + roomHash;
 const configuration = {
-  iceServers: [
-   {
-     urls: 'stun:stun.l.google.com:19302?transport=udp'
-   },
-   {
-     urls: 'stun:stun.callromania.ro:3478'
-   },   
-   {
-     urls: 'stun:iphone-stun.strato-iphone.de:3478'
-   },   
-   {
-    url: 'turn:numb.viagenie.ca',
-    credential: 'muazkh',
-    username: 'webrtc@live.com'
-   },
-   {
-       urls: 'turn:192.158.29.39:3478?transport=udp',
-       credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-       username: '28224511:1379330808'
-   },
-   {
-       urls: 'turn:192.158.29.39:3478?transport=tcp',
-       credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
-       username: '28224511:1379330808'
-   },
-   {
-       urls: 'turn:turn.bistri.com:80',
-       credential: 'homeo',
-       username: 'homeo'
-    },
-    {
-       urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
-       credential: 'webrtc',
-       username: 'webrtc'
-   }
-  ]
+  iceServers: [{
+     urls: [ "stun:eu-turn5.xirsys.com" ]
+  }, {
+     username: "h_6Evb28LaWWvEpPO1ttd0YIIJHCy3QOZfGLcYUSgain36coBFV6Hi7UilrY1hNqAAAAAGA7XPBBbGV4SGFuZw==",
+     credential: "28a8ec0a-79a4-11eb-8653-0242ac140004",
+     urls: [
+         "turn:eu-turn5.xirsys.com:80?transport=udp",
+         "turn:eu-turn5.xirsys.com:3478?transport=udp",
+         "turn:eu-turn5.xirsys.com:80?transport=tcp",
+         "turn:eu-turn5.xirsys.com:3478?transport=tcp",
+         "turns:eu-turn5.xirsys.com:443?transport=tcp",
+         "turns:eu-turn5.xirsys.com:5349?transport=tcp"
+     ]
+  }]
 };
 let room;
 let pc;
