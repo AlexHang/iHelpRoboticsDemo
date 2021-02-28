@@ -14,7 +14,7 @@ const roomName = 'observable-' + roomHash;
 const configuration = {
     'iceServers': [
     {
-      'url': 'numb.viagenie.ca',
+      'url': 'turn:numb.viagenie.ca',
       'credential':'iHelpRobotics',
       'username': 'alexandruhang@yahoo.com'
     },
