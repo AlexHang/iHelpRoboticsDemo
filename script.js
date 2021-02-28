@@ -14,10 +14,10 @@ const configuration = {
      urls: 'stun:stun.l.google.com:19302?transport=udp'
    },
    {
-     urls: 'stun.callromania.ro:3478'
+     urls: 'stun:stun.callromania.ro:3478'
    },   
    {
-     urls: 'iphone-stun.strato-iphone.de:3478'
+     urls: 'stun:iphone-stun.strato-iphone.de:3478'
    },   
     {
      urls: 'turn:turn01.hubl.in?transport=udp'
