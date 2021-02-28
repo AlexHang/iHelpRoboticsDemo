@@ -25,22 +25,22 @@ const configuration = {
     username: 'webrtc@live.com'
    },
    {
-       url: 'turn:192.158.29.39:3478?transport=udp',
+       urls: 'turn:192.158.29.39:3478?transport=udp',
        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
        username: '28224511:1379330808'
    },
    {
-       url: 'turn:192.158.29.39:3478?transport=tcp',
+       urls: 'turn:192.158.29.39:3478?transport=tcp',
        credential: 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
        username: '28224511:1379330808'
    },
    {
-       url: 'turn:turn.bistri.com:80',
+       urls: 'turn:turn.bistri.com:80',
        credential: 'homeo',
        username: 'homeo'
     },
     {
-       url: 'turn:turn.anyfirewall.com:443?transport=tcp',
+       urls: 'turn:turn.anyfirewall.com:443?transport=tcp',
        credential: 'webrtc',
        username: 'webrtc'
    }
@@ -106,15 +106,7 @@ function startWebRTC(isOfferer) {
     remoteVideo.srcObject = event.stream;
   };
 
-  navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: true,
-  }).then(stream => {
-    // Display your local video in #localVideo element
-    localVideo.srcObject = stream;
-    // Add your stream to be sent to the conneting peer
-    pc.addStream(stream);
-  }, onError);
+ 
 
   // Listen to signaling data from Scaledrone
   room.on('data', (message, client) => {
@@ -126,6 +118,17 @@ function startWebRTC(isOfferer) {
     if (message.sdp) {
       // This is called after receiving an offer or answer from another peer
       pc.setRemoteDescription(new RTCSessionDescription(message.sdp), () => {
+		 
+		navigator.mediaDevices.getUserMedia({
+			audio: true,
+			video: true,
+		  }).then(stream => {
+			// Display your local video in #localVideo element
+			localVideo.srcObject = stream;
+			// Add your stream to be sent to the conneting peer
+			pc.addStream(stream);
+		  }, onError);
+		  
         // When receiving an offer lets answer it
         if (pc.remoteDescription.type === 'offer') {
           pc.createAnswer().then(localDescCreated).catch(onError);
@@ -147,3 +150,4 @@ function localDescCreated(desc) {
     onError
   );
 }
+© 2021 GitHub, Inc.
